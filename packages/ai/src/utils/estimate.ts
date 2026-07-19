@@ -31,7 +31,7 @@ function estimateTextAndImageContentChars(content: string | Array<TextContent | 
 	if (typeof content === "string") return content.length;
 
 	let chars = 0;
-	for (const block of content) chars += block.type === "text" ? block.text.length : ESTIMATED_IMAGE_CHARS;
+	for (const block of content) chars += block.type === "text" && block.text ? block.text.length : ESTIMATED_IMAGE_CHARS;
 	return chars;
 }
 
@@ -50,9 +50,9 @@ export function estimateMessageTokens(message: Message): number {
 	if (message.role === "toolResult") return estimateTextAndImageContentTokens(message.content);
 
 	for (const block of message.content) {
-		if (block.type === "text") {
+		if (block.type === "text" && block.text) {
 			chars += block.text.length;
-		} else if (block.type === "thinking") {
+		} else if (block.type === "thinking" && block.thinking) {
 			chars += block.thinking.length;
 		} else {
 			chars += block.name.length + safeJsonStringify(block.arguments).length;

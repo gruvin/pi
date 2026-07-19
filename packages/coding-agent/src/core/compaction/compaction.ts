@@ -251,9 +251,9 @@ export function estimateTokens(message: AgentMessage): number {
 		case "assistant": {
 			const assistant = message as AssistantMessage;
 			for (const block of assistant.content) {
-				if (block.type === "text") {
+				if (block.type === "text" && block.text) {
 					chars += block.text.length;
-				} else if (block.type === "thinking") {
+				} else if (block.type === "thinking" && block.thinking) {
 					chars += block.thinking.length;
 				} else if (block.type === "toolCall") {
 					chars += block.name.length + JSON.stringify(block.arguments).length;
